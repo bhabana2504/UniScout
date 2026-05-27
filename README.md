@@ -1,10 +1,9 @@
 #  UniScout - Unified Smart Campus Portal
 
-UniScout is a state-of-the-art, high-fidelity campus resource portal and ERP dashboard designed to unify academic management, event calendars, student clubs, notices, and faculty directories into a singular web ecosystem. 
-
-Featuring a premium **3D Cyber-Obsidian & Electric Purple theme** with mathematical parallax effects, custom mathematical cursor tracking, and active standby backend fallback synchronization, UniScout provides a highly premium and intuitive experience for students.
+UniScout is a smart campus portal that helps students stay connected with university activities, events, and resources through a modern full-stack web application. It combines an interactive frontend with a backend API system for managing student data and campus operations.
 
 ---
+## Live Preview :-  **(https://erphelp.netlify.app/)**
 
 ##  System Architecture
 
@@ -157,7 +156,7 @@ npm start
 
 ### Step 4: Open in Browser
 Open your browser and navigate to:
- **[http://localhost:5000/](http://localhost:5000/)**
+ **(https://erphelp.netlify.app/)**
 
 ---
 
