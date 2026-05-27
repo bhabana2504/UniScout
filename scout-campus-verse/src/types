@@ -1,0 +1,3 @@
+declare module "lovable-tagger" {
+  // Removed duplicate export to avoid 'Duplicate identifier' error
+}

@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniScout - Smart Campus Portal</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ario-Inspired Custom Interactive Cursor -->
+  <div class="custom-cursor" id="custom-cursor"></div>
+  <div class="custom-cursor-ring" id="custom-cursor-ring"></div>
+
+  <!-- Interactive 3D Canvas Background -->
+  <canvas id="bg-canvas" class="bg-canvas"></canvas>
+
+  <!-- Loading Screen & Animated Intro -->
+  <div id="animated-intro" class="animated-intro">
+    <div class="intro-content">
+      <div class="preloader-lines">
+        <div class="preloader-line preloader-line-h"></div>
+        <div class="preloader-line preloader-line-v"></div>
+      </div>
+      <div class="intro-logo">
+        <i data-lucide="school" class="intro-icon"></i>
+        <span>Uni Scout</span>
+      </div>
+      <div class="intro-loader"></div>
+      <p class="intro-tagline">Synchronizing Campus Life...</p>
+    </div>
+  </div>
+
+  <!-- AUTHENTICATION CONTAINER (LOGIN) -->
+  <div id="login-container" class="login-container">
+    <div class="login-card card-3d">
+      <div class="card-line card-line-h"></div>
+      <div class="card-line card-line-v"></div>
+      <div class="login-header">
+        <div class="brand-logo depth-3d-avatar">
+          <i data-lucide="school" class="logo-icon"></i>
+          <span>Uni Scout</span>
+        </div>
+        <h2 class="depth-3d-title">Welcome Back</h2>
+        <p class="depth-3d-subtitle">Sign in to your smart campus portal</p>
+      </div>
+      <form id="login-form" class="login-form depth-3d-form">
+        <div class="form-group">
+          <label for="login-email">Student Email</label>
+          <div class="input-wrapper">
+            <i data-lucide="mail" class="input-icon"></i>
+            <input type="email" id="login-email" placeholder="student@university.edu" required value="student@university.edu">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <div class="input-wrapper">
+            <i data-lucide="lock" class="input-icon"></i>
+            <input type="password" id="login-password" placeholder="••••••••" required value="password123">
+          </div>
+        </div>
+        <button type="submit" id="btn-login" class="btn-primary btn-full">
+          Sign In
+          <i data-lucide="arrow-right"></i>
+        </button>
+      </form>
+      <div class="login-footer">
+        <p>Demo Account: Use default credentials to sign in instantly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP CONTAINER (HIDDEN UNTIL AUTHENTICATED) -->
+  <div id="app-container" class="app-container hidden">
+    
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <i data-lucide="school" class="sidebar-logo-icon"></i>
+        <span>Uni Scout</span>
+      </div>
+
+      <!-- Quick Profile Preview -->
+      <div class="sidebar-profile">
+        <img id="sidebar-avatar" src="bhabana.jpg" alt="Avatar" class="avatar-img">
+        <div class="profile-details">
+          <h4 id="sidebar-name">Bhabana Kalita</h4>
+          <p id="sidebar-major">B.Tech Computer Science</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <div class="menu-category">Core</div>
+        <a href="#" class="menu-item active" data-view="dashboard" id="nav-dashboard">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <div class="menu-category">Academics & ERP</div>
+        <a href="#" class="menu-item" data-view="erp" id="nav-erp">
+          <i data-lucide="graduation-cap"></i>
+          <span>ERP Portal</span>
+        </a>
+        <a href="#" class="menu-item" data-view="scholarships" id="nav-scholarships">
+          <i data-lucide="award"></i>
+          <span>Scholarships</span>
+        </a>
+        <a href="#" class="menu-item" data-view="certificates" id="nav-certificates">
+          <i data-lucide="file-text"></i>
+          <span>Certificates</span>
+        </a>
+        <a href="#" class="menu-item" data-view="electives" id="nav-electives">
+          <i data-lucide="alert-triangle"></i>
+          <span>Electives Choice</span>
+        </a>
+
+        <div class="menu-category">Campus Engagement</div>
+        <a href="#" class="menu-item" data-view="events" id="nav-events">
+          <i data-lucide="calendar"></i>
+          <span>Events Hub</span>
+        </a>
+        <a href="#" class="menu-item" data-view="communities" id="nav-communities">
+          <i data-lucide="users"></i>
+          <span>Clubs & Societies</span>
+        </a>
+        <a href="#" class="menu-item" data-view="noticeboard" id="nav-noticeboard">
+          <i data-lucide="bell"></i>
+          <span>Noticeboard</span>
+        </a>
+        <a href="#" class="menu-item" data-view="complaints" id="nav-complaints">
+          <i data-lucide="message-square"></i>
+          <span>Complaints Filing</span>
+        </a>
+        <a href="#" class="menu-item" data-view="reports" id="nav-reports">
+          <i data-lucide="file-bar-chart"></i>
+          <span>Event Reports</span>
+        </a>
+
+        <div class="menu-category">Registries & Info</div>
+        <a href="#" class="menu-item" data-view="faculty" id="nav-faculty">
+          <i data-lucide="user-check"></i>
+          <span>Faculty Directory</span>
+        </a>
+        <a href="#" class="menu-item" data-view="students" id="nav-students">
+          <i data-lucide="users-2"></i>
+          <span>Students Registry</span>
+        </a>
+        <a href="#" class="menu-item" data-view="profile" id="nav-profile">
+          <i data-lucide="user"></i>
+          <span>My Profile</span>
+        </a>
+        <a href="#" class="menu-item" data-view="about" id="nav-about">
+          <i data-lucide="info"></i>
+          <span>About Uni Scout</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Theme">
+          <i data-lucide="moon" class="theme-icon-dark"></i>
+          <i data-lucide="sun" class="theme-icon-light hidden"></i>
+          <span id="theme-toggle-text">Dark Mode</span>
+        </button>
+        <button id="btn-logout" class="logout-btn">
+          <i data-lucide="log-out"></i>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="main-content">
+      
+      <!-- HEADER -->
+      <header class="app-header">
+        <div class="header-left">
+          <button id="mobile-sidebar-toggle" class="mobile-toggle-btn">
+            <i data-lucide="menu"></i>
+          </button>
+          <div class="breadcrumbs">
+            <span class="breadcrumb-parent">Uni Scout</span>
+            <span class="breadcrumb-separator">/</span>
+            <span id="breadcrumb-active" class="breadcrumb-current">Dashboard</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <!-- Notification Bell -->
+          <div class="notification-container">
+            <button id="notification-bell" class="header-btn" title="View Announcements">
+              <i data-lucide="bell"></i>
+              <span id="notification-badge" class="badge-dot"></span>
+            </button>
+            <div id="notification-dropdown" class="notification-dropdown hidden">
+              <div class="dropdown-header">
+                <h3>Notifications & Alerts</h3>
+                <button id="btn-clear-notifications" class="btn-text">Clear All</button>
+              </div>
+              <div id="notification-list" class="dropdown-list">
+                <!-- Loaded dynamically -->
+              </div>
+            </div>
+          </div>
+          <!-- Profile Badge -->
+          <div class="user-badge" id="header-profile-badge">
+            <img id="header-avatar" src="bhabana.jpg" alt="Avatar" class="avatar-small">
+            <span id="header-name">Bhabana</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- VIEW PANELS CONTAINER -->
+      <div class="view-panel-container">
+
+        <!-- 1. DASHBOARD VIEW -->
+        <section id="dashboard-section" class="view-section active animate-fade-in">
+          <div class="section-header">
+            <div class="welcome-block">
+              <h1 class="text-3xl font-bold">Welcome, <span id="welcome-student-name">Bhabana</span></h1>
+              <p class="text-muted-foreground" id="current-date-display">Thursday, May 28, 2026</p>
+            </div>
+            <div class="quick-status">
+              <div class="status-chip">
+                <span class="status-dot online"></span>
+                <span>Active Semester</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Navigation Cards -->
+          <div class="grid grid-3 gap-6 mt-6">
+            <a href="#" class="quick-link-card bg-purple-grad" data-target-view="erp">
+              <div class="card-icon-wrapper">
+                <i data-lucide="graduation-cap"></i>
+              </div>
+              <h3>ERP Portal</h3>
+              <p>Access academics, scholarships & certificates</p>
+            </a>
+            <a href="#" class="quick-link-card bg-teal-grad" data-target-view="communities">
+              <div class="card-icon-wrapper">
+                <i data-lucide="users"></i>
+              </div>
+              <h3>Clubs & Societies</h3>
+              <p>Join student clubs and organize campus events</p>
+            </a>
+            <a href="#" class="quick-link-card bg-coral-grad" data-target-view="events">
+              <div class="card-icon-wrapper">
+                <i data-lucide="calendar"></i>
+              </div>
+              <h3>Upcoming Events</h3>
+              <p>Explore campus festivals, tech meets, and career fairs</p>
+            </a>
+          </div>
+
+          <!-- Mid Section: Events & Announcements -->
+          <div class="grid grid-3-2 gap-6 mt-6">
+            <!-- Events -->
+            <div class="card card-hover">
+              <div class="card-header">
+                <div class="card-header-title">
+                  <i data-lucide="calendar" class="text-primary"></i>
+                  <h2>Upcoming Events This Month</h2>
+                </div>
+                <button class="btn-text" data-target-view="events">View All</button>
+              </div>
+              <div class="card-content">
+                <div id="dashboard-events-list" class="space-y-4">
+                  <!-- Loaded dynamically -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Announcements -->
+            <div class="card card-hover">
+              <div class="card-header">
+                <div class="card-header-title">
+                  <i data-lucide="megaphone" class="text-secondary"></i>
+                  <h2>Latest Announcements</h2>
+                </div>
+                <button class="btn-text" data-target-view="noticeboard">View Notices</button>
+              </div>
+              <div class="card-content">
+                <div id="dashboard-announcements-list" class="announcements-timeline">
+                  <!-- Loaded dynamically -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. ERP PORTAL VIEW -->
+        <section id="erp-section" class="view-section animate-fade-in">
+          <div class="section-header">
+            <div>
+              <h1 class="text-3xl font-bold">Academics ERP Cockpit</h1>
+              <p class="text-muted-foreground">Overview of academic standing, semester progress, and administrative staff contact details</p>
+            </div>
+          </div>
+
+          <div class="grid grid-3 gap-6 mt-6">
+            <!-- GPA & Standing Card -->
+            <div class="card card-hover flex flex-col justify-between p-6 bg-purple-grad" style="min-height: 200px;">
+              <div>
+                <span class="badge-primary" style="background-color: var(--primary-dark);">GPA standing</span>
+                <h2 class="text-3xl font-bold mt-4" style="color: var(--primary-dark); font-family: 'Outfit', sans-serif;">8.00 / 10</h2>
+                <p class="text-xs mt-2" style="color: var(--primary-dark); opacity: 0.8;">Top 5% of B.Tech Computer Science Class</p>
+              </div>
+              <div class="flex justify-between items-center mt-4">
+                <span class="text-xs" style="color: var(--primary-dark); opacity: 0.7;">Roll: US-2026-984</span>
+                <span class="badge-status-active" style="background-color: var(--primary-dark); color: #ffffff;">Active</span>
+              </div>
+            </div>
+
+            <!-- Semester Progress Card -->
+            <div class="card card-hover flex flex-col justify-between p-6" style="min-height: 200px;">
+              <div>
+                <span class="badge-primary" style="background-color: var(--secondary);">Spring 2026</span>
+                <h2 class="text-xl font-bold mt-4">Semester Progress</h2>
+                <div class="progress-bar-container mt-3" style="background: var(--muted); height: 10px; border-radius: 5px; overflow: hidden;">
+                  <div class="progress-bar-fill" style="background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 85%; height: 100%; border-radius: 5px;"></div>
+                </div>
+                <p class="text-xs text-muted-foreground mt-2">12 Weeks Completed | 2 Weeks Remaining</p>
+              </div>
+              <span class="text-xs text-muted-foreground">Midterms concluded • Endterms scheduled</span>
+            </div>
+
+            <!-- Curriculum Credit Card -->
+            <div class="card card-hover flex flex-col justify-between p-6" style="min-height: 200px;">
+              <div>
+                <span class="badge-primary" style="background-color: var(--primary);">Total Credits</span>
+                <h2 class="text-xl font-bold mt-4">Credit Completion</h2>
+                <div class="progress-bar-container mt-3" style="background: var(--muted); height: 10px; border-radius: 5px; overflow: hidden;">
+                  <div class="progress-bar-fill" style="background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 72%; height: 100%; border-radius: 5px;"></div>
+                </div>
+                <p class="text-xs text-muted-foreground mt-2">108 / 150 Total Credits Earned</p>
+              </div>
+              <span class="text-xs text-muted-foreground">Degree progress: 72%</span>
+            </div>
+          </div>
+
+          <!-- Faculty Advisor Card -->
+          <div class="card mt-6">
+            <div class="card-header">
+              <h2>Concerned Assigned Faculty</h2>
+              <p class="card-subtitle">Reach out to your assigned academic advisors and coordinators</p>
+            </div>
+            <div class="card-content">
+              <div class="grid grid-2 gap-6" id="erp-faculty-list">
+                <!-- Loaded dynamically -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2B. SCHOLARSHIPS VIEW -->
+        <section id="scholarships-section" class="view-section animate-fade-in">
+          <div class="section-header">
+            <div>
+              <h1 class="text-3xl font-bold">Scholarships & Financial Aid</h1>
+              <p class="text-muted-foreground">Apply for merit awards, research fellowships, and active financial assistance</p>
+            </div>
+          </div>
+
+          <div class="card mt-6">
+            <div class="card-header">
+              <div class="card-header-title">
+                <i data-lucide="award" class="text-primary"></i>
+                <h2>Available Scholarships</h2>
+              </div>
+              <p class="card-subtitle">Apply for financial aid and academic merit awards directly</p>
+            </div>
+            <div class="card-content">
+              <div class="scholarships-grid grid grid-1 gap-4" id="scholarships-list">
+                <!-- Loaded dynamically -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2C. CERTIFICATES VIEW -->
+        <section id="certificates-section" class="view-section animate-fade-in">
+          <div class="section-header">
+            <div>
+              <h1 class="text-3xl font-bold">Earned Credentials</h1>
+              <p class="text-muted-foreground">Official university verified certificates and academic achievements</p>
+            </div>
+          </div>
+
+          <div class="card mt-6">
+            <div class="card-header">
+              <div class="card-header-title">
+                <i data-lucide="file-text" class="text-primary"></i>
+                <h2>Verified Credentials</h2>
+              </div>
+              <p class="card-subtitle">Download official verified certificates for your achievements</p>
+            </div>
+            <div class="card-content">
+              <div class="certificates-list space-y-4" id="certificates-list-container">
+                <!-- Loaded dynamically -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2D. ELECTIVES CHOICE VIEW -->
+        <section id="electives-section" class="view-section animate-fade-in">
+          <div class="section-header">
+            <div>
+              <h1 class="text-3xl font-bold">Elective Course Selection</h1>
+              <p class="text-muted-foreground">Select your elective curriculum subjects for future semesters</p>
+            </div>
+          </div>
+
+          <div class="card text-center p-8 mt-6">
+            <div class="empty-state-icon">
+              <i data-lucide="lock" class="large-icon text-muted"></i>
+            </div>
+            <h2>Elective Choice Selection Closed</h2>
+            <p class="text-muted-foreground mt-2 max-w-md mx-auto">
+              The curriculum course elective window is currently closed for the Spring 2026 semester. The next elective window opens on <strong>June 1, 2026</strong>.
+            </p>
+            <div class="mt-6">
+              <button class="btn-outline" id="btn-view-curriculum">View Course Curriculum</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2E. COMPLAINTS VIEW -->
+        <section id="complaints-section" class="view-section animate-fade-in">
+          <div class="section-header">
+            <div>
+              <h1 class="text-3xl font-bold">Complaints & Feedback</h1>
+              <p class="text-muted-foreground">File infrastructure feedback, academic queries, or library requests</p>
+            </div>
+          </div>
+
+          <div class="grid grid-3-2 gap-6 mt-6">
+            <!-- Complaint Form -->
+            <div class="card">
+              <div class="card-header">
+                <h2>Submit Feedback / Complaint</h2>
+                <p class="card-subtitle">Report infrastructure issues, administrative hurdles, or library requirements</p>
+              </div>
+              <div class="card-content">
+                <form id="complaint-form" class="space-y-4">
+                  <div class="form-group">
+                    <label for="complaint-title">Issue Title</label>
+                    <input type="text" id="complaint-title" placeholder="e.g. Broken AC in Library Wing B" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="complaint-category">Category</label>
+                    <select id="complaint-category" required>
+                      <option value="">Select Category</option>
+                      <option value="Academic">Academics</option>
+                      <option value="Facility">Facility & Infrastructure</option>
+                      <option value="IT">IT & Network Services</option>
+                      <option value="Library">Library Services</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="complaint-description">Details & Description</label>
+                    <textarea id="complaint-description" rows="4" placeholder="Please describe the issue in detail, including specific locations and times..." required></textarea>
+                  </div>
+                  <button type="submit" class="btn-primary">
+                    <i data-lucide="send"></i> File Complaint
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Recent Complaints Tracking -->
+            <div class="card">
+              <div class="card-header">
+                <h2>My Recent Filings</h2>
+                <p class="card-subtitle">Real-time status updates of your submitted tickets</p>
+              </div>
+              <div class="card-content">
+                <div id="recent-complaints-list" class="space-y-4">
+                  <!-- Loaded dynamically -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. EVENTS VIEW -->
+        <section id="events-section" class="view-section animate-fade-in">
+          <div class="section-header">
+            <div>
+              <h1 class="text-3xl font-bold">Campus Events Hub</h1>
+              <p class="text-muted-foreground">Register for dynamic campus events, tech fests, and workshops</p>
+            </div>
+          </div>
+
+          <!-- Filter & Search Panel -->
+          <div class="filter-panel mt-6">
+            <div class="search-box-wrapper">
+              <i data-lucide="search"></i>
+              <input type="text" id="event-search-input" placeholder="Search events by title, organizer...">
+            </div>
+            <div class="filters-chips" id="events-filter-chips">
+              <button class="chip-btn active" data-filter="all">All Events</button>
+              <button class="chip-btn" data-filter="Tech">Tech Councils</button>
+              <button class="chip-btn" data-filter="Cultural">Cultural Nights</button>
+              <button class="chip-btn" data-filter="Career">Career & Internships</button>
+            </div>
+          </div>
+
+          <!-- Events Catalog Grid -->
+          <div class="grid grid-3 gap-6 mt-6" id="events-catalog-grid">
+            <!-- Loaded dynamically -->
+          </div>
+        </section>
+
+        <!-- 4. COMMUNITIES VIEW -->
+        <section id="communities-section" class="view-section animate-fade-in">
+          <div class="section-header">
+            <div>
+              <h1 class="text-3xl font-bold">Clubs & Student Societies</h1>
+              <p class="text-muted-foreground">Discover campus communities, join interests clubs, and meet peers</p>
+            </div>
+          </div>
+
+          <!-- Directory List -->
+          <div class="grid grid-3 gap-6 mt-6" id="clubs-directory-grid">
+            <!-- Loaded dynamically -->
+          </div>
+        </section>
+
+        <!-- 5. REPORTS VIEW -->
+        <section id="reports-section" class="view-section animate-fade-in">
+          <div class="section-header">
+            <div>
+              <h1 class="text-3xl font-bold">Event & Activity Reports</h1>
+              <p class="text-muted-foreground">Review published briefs and reports of concluded campus events</p>
+            </div>
+          </div>
+
+          <!-- Reports search and layout -->
+          <div class="card mt-6">
+            <div class="card-header flex justify-between items-center">
+              <div>
+                <h2>Event Report Library</h2>
+                <p class="card-subtitle">Official records of academic, cultural, and sports achievements</p>
+              </div>
+              <div class="search-box-wrapper border-search">
+                <i data-lucide="search"></i>
+                <input type="text" id="report-search-input" placeholder="Search report library...">
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Event Title</th>
+                      <th>Category</th>
+                      <th>Concluded Date</th>
+                      <th>Lead Organizer</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reports-table-body">
+                    <!-- Loaded dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. NOTICEBOARD & CALENDAR VIEW -->
+        <section id="noticeboard-section" class="view-section animate-fade-in">
+          <div class="section-header">
+            <div>
+              <h1 class="text-3xl font-bold">Noticeboard & Calendar</h1>
+              <p class="text-muted-foreground">Synched live notices, emergency circulars, and event scheduling</p>
+            </div>
+          </div>
+
+          <div class="grid grid-2 gap-6 mt-6">
+            <!-- Notices Timeline -->
+            <div class="card">
+              <div class="card-header">
+                <h2>Official Campus Circulars</h2>
+                <p class="card-subtitle">High priority notifications from the administration board</p>
+              </div>
+              <div class="card-content">
+                <div id="noticeboard-timeline-list" class="timeline-spaced">
+                  <!-- Loaded dynamically -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Custom Interactive Calendar -->
+            <div class="card">
+              <div class="card-header flex justify-between items-center">
+                <div>
+                  <h2 id="calendar-month-year">May 2026</h2>
+                  <p class="card-subtitle">Click on active highlighted dates to see scheduled events</p>
+                </div>
+                <div class="calendar-controls">
+                  <button id="prev-month-btn" class="icon-btn-outline"><i data-lucide="chevron-left"></i></button>
+                  <button id="next-month-btn" class="icon-btn-outline"><i data-lucide="chevron-right"></i></button>
+                </div>
+              </div>
+              <div class="card-content">
+                <div class="calendar-wrapper">
+                  <!-- Calendar Header Days -->
+                  <div class="calendar-days-header">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                  </div>
+                  <!-- Calendar Days Grid -->
+                  <div id="calendar-grid" class="calendar-grid">
+                    <!-- Dynamic rendering -->
+                  </div>
+                </div>
+                <div class="calendar-legend mt-4">
+                  <div class="legend-item">
+                    <span class="legend-dot active-date"></span>
+                    <span>Highlighted Events Scheduled</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. FACULTY VIEW -->
+        <section id="faculty-section" class="view-section animate-fade-in">
+          <div class="section-header">
+            <div>
+              <h1 class="text-3xl font-bold">Faculty Directory</h1>
+              <p class="text-muted-foreground">Search and connect with professors and departmental academic staff</p>
+            </div>
+          </div>
+
+          <!-- Directory Filters -->
+          <div class="filter-panel mt-6">
+            <div class="search-box-wrapper">
+              <i data-lucide="search"></i>
+              <input type="text" id="faculty-search-input" placeholder="Search professors by name, course...">
+            </div>
+            <div class="filters-chips" id="faculty-filter-chips">
+              <button class="chip-btn active" data-dept="all">All Departments</button>
+              <button class="chip-btn" data-dept="CS">Computer Science</button>
+              <button class="chip-btn" data-dept="EE">Electrical Eng</button>
+              <button class="chip-btn" data-dept="MA">Mathematics</button>
+            </div>
+          </div>
+
+          <!-- Faculty grid -->
+          <div class="grid grid-3 gap-6 mt-6" id="faculty-directory-grid">
+            <!-- Loaded dynamically -->
+          </div>
+        </section>
+
+        <!-- 8. STUDENTS VIEW (API INTEGRATION) -->
+        <section id="students-section" class="view-section animate-fade-in">
+          <div class="section-header">
+            <div>
+              <h1 class="text-3xl font-bold">Dynamic Students Database</h1>
+              <p class="text-muted-foreground">Live integration connecting the HTML/JS frontend to the Express Node & MySQL backend API</p>
+            </div>
+          </div>
+
+          <!-- Connection Helper Information Box -->
+          <div id="db-status-banner" class="db-status-banner mt-6 warning">
+            <div class="banner-icon">
+              <i data-lucide="database"></i>
+            </div>
+            <div class="banner-content">
+              <h3 id="db-banner-title">Express API Standby</h3>
+              <p id="db-banner-desc">Checking connectivity with Node server at http://localhost:5000/api/students...</p>
+            </div>
+          </div>
+
+          <!-- Student Database Card -->
+          <div class="card mt-6">
+            <div class="card-header flex justify-between items-center">
+              <div>
+                <h2>Registered Student Directory</h2>
+                <p class="card-subtitle">Active user records pulled directly from the backend MySQL table</p>
+              </div>
+              <button id="btn-refresh-students" class="btn-outline">
+                <i data-lucide="rotate-cw"></i> Refresh Data
+              </button>
+            </div>
+            <div class="card-content">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Student ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Major</th>
+                      <th>Grade (GPA)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="students-table-body">
+                    <tr>
+                      <td colspan="5" class="text-center p-6 text-muted-foreground">
+                        <div class="loader-spinner spinner-small mx-auto"></div>
+                        <p class="mt-2">Connecting to student API...</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 9. PROFILE VIEW -->
+        <section id="profile-section" class="view-section animate-fade-in">
+          <div class="section-header">
+            <div>
+              <h1 class="text-3xl font-bold">My Student Profile</h1>
+              <p class="text-muted-foreground">Customize your public card display and manage personal identifiers</p>
+            </div>
+          </div>
+
+          <div class="grid grid-3-2 gap-6 mt-6">
+            <!-- Profile Editor Form -->
+            <div class="card">
+              <div class="card-header">
+                <h2>Edit Personal Information</h2>
+                <p class="card-subtitle">Updates reflect immediately across headers, sidebar, and dashboard</p>
+              </div>
+              <div class="card-content">
+                <form id="profile-edit-form" class="space-y-4">
+                  <!-- Avatar Picker -->
+                  <div class="form-group">
+                    <label>Choose Profile Picture</label>
+                    <div class="avatar-choices mt-2" id="avatar-choices-grid">
+                      <!-- Loaded dynamically -->
+                    </div>
+                  </div>
+                  
+                  <div class="grid grid-2 gap-4">
+                    <div class="form-group">
+                      <label for="profile-name">Full Name</label>
+                      <input type="text" id="profile-name" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="profile-roll">Roll ID / Student Number</label>
+                      <input type="text" id="profile-roll" readonly class="bg-input-readonly">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="profile-email">University Email</label>
+                    <input type="email" id="profile-email" required>
+                  </div>
+
+                  <div class="grid grid-2 gap-4">
+                    <div class="form-group">
+                      <label for="profile-major">Major & Stream</label>
+                      <input type="text" id="profile-major" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="profile-gpa">Current CGPA</label>
+                      <input type="number" id="profile-gpa" step="0.01" min="0" max="10.00" required>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn-primary">
+                    <i data-lucide="check"></i> Save Changes
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Public Profile Card Preview -->
+            <div class="card flex flex-col justify-between profile-preview-card card-3d">
+              <div class="card-line card-line-h"></div>
+              <div class="card-line card-line-v"></div>
+              <div class="preview-card-header">
+                <span>OFFICIAL STUDENT IDENTIFICATION</span>
+                <i data-lucide="school"></i>
+              </div>
+              <div class="preview-card-body mt-4">
+                <div class="preview-main-info">
+                  <img id="preview-avatar" src="" alt="Avatar" class="avatar-large depth-3d-avatar">
+                  <div class="preview-text-block">
+                    <h2 id="preview-name" class="depth-3d-title">Bhabana Kalita</h2>
+                    <span id="preview-major-badge" class="badge-primary depth-3d-subtitle">Computer Science</span>
+                    <p class="roll-number mt-2">Roll ID: <strong id="preview-roll">US-2026-984</strong></p>
+                  </div>
+                </div>
+                <div class="preview-meta-grid mt-6 grid grid-2 gap-4 depth-3d-info">
+                  <div>
+                    <label>E-MAIL ADDRESS</label>
+                    <p id="preview-email">b.kalita@university.edu</p>
+                  </div>
+                  <div>
+                    <label>ACADEMIC STANDING</label>
+                    <p>CGPA: <strong id="preview-gpa">8.00 / 10</strong></p>
+                  </div>
+                </div>
+              </div>
+              <div class="preview-card-footer mt-6">
+                <span>UNI SCOUT CAMPUS SYSTEM INTEGRATION • 2026</span>
+                <span class="badge-status-active">Active Enrollment</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10. ABOUT VIEW -->
+        <section id="about-section" class="view-section animate-fade-in">
+          <div class="section-header">
+            <div>
+              <h1 class="text-3xl font-bold">About Uni Scout</h1>
+              <p class="text-muted-foreground">Discover the unified smart campus portal driving interaction and engagement</p>
+            </div>
+          </div>
+
+          <div class="card mt-6">
+            <div class="card-content p-8 text-center max-w-2xl mx-auto">
+              <div class="about-logo-wrapper">
+                <i data-lucide="school" class="large-logo text-primary"></i>
+                <h2 class="text-3xl font-bold mt-2">Uni Scout Smart Portal</h2>
+                <span class="badge-primary">v2.0.0 Stable</span>
+              </div>
+              <p class="text-muted-foreground mt-4 leading-relaxed">
+                Uni Scout is a dynamic next-generation campus resource directory and information hub designed to unify disparate academic and extra-curricular campus systems. By streamlining notifications, notices, certificate issuances, clubs dashboards, and department directories, U-Scout drives student collaboration, minimizes administrative bottlenecks, and boosts overall campus performance.
+              </p>
+              <div class="divider my-6"></div>
+              <h3 class="font-semibold text-lg">System Specifications & Architecture</h3>
+              <div class="grid grid-3 gap-4 mt-4">
+                <div class="spec-card">
+                  <div class="spec-icon"><i data-lucide="html5" class="text-orange"></i></div>
+                  <h4>Frontend</h4>
+                  <p>Semantic HTML5, Vanilla ES6 JS, Flex & CSS Grid Core Layouts</p>
+                </div>
+                <div class="spec-card">
+                  <div class="spec-icon"><i data-lucide="server" class="text-primary"></i></div>
+                  <h4>Backend</h4>
+                  <p>Express Node JS, CORS Middleware, JSON API Protocols</p>
+                </div>
+                <div class="spec-card">
+                  <div class="spec-icon"><i data-lucide="database" class="text-secondary"></i></div>
+                  <h4>Database</h4>
+                  <p>Relational SQL Database (MySQL Engine via mysql2)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== GLOBAL MODALS ==================== -->
+  
+  <!-- 1. Scholarship Application Modal -->
+  <div id="scholarship-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="scholarship-modal-title">Apply for Scholarship</h2>
+        <button id="close-scholarship-modal" class="close-btn"><i data-lucide="x"></i></button>
+      </div>
+      <form id="scholarship-application-form" class="modal-body space-y-4">
+        <div class="form-group">
+          <label>Scholarship Type</label>
+          <input type="text" id="scholarship-field-type" readonly class="bg-input-readonly">
+        </div>
+        <div class="grid grid-2 gap-4">
+          <div class="form-group">
+            <label for="scholarship-student-name">Full Name</label>
+            <input type="text" id="scholarship-student-name" required>
+          </div>
+          <div class="form-group">
+            <label for="scholarship-student-gpa">Current CGPA</label>
+            <input type="number" id="scholarship-student-gpa" step="0.01" readonly class="bg-input-readonly">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="scholarship-statement">Statement of Purpose / Why do you qualify?</label>
+          <textarea id="scholarship-statement" rows="4" placeholder="Describe your achievements, extra-curriculars, or financial requirements..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="scholarship-transcript">Upload Unofficial Academic Transcript (Mock)</label>
+          <div class="file-upload-stub">
+            <i data-lucide="upload-cloud"></i>
+            <span>Click to upload PDF transcript (Max 5MB)</span>
+            <input type="file" id="scholarship-transcript" class="hidden-file-input">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btn-cancel-scholarship" class="btn-outline">Cancel</button>
+          <button type="submit" class="btn-primary">Submit Application</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Event Calendar Detail Modal -->
+  <div id="calendar-event-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="calendar-event-title">Event Title</h2>
+        <button id="close-calendar-modal" class="close-btn"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body space-y-4">
+        <div class="event-meta-badge-strip">
+          <span id="calendar-event-category" class="badge-primary">Tech</span>
+          <span id="calendar-event-organizer" class="badge-neutral">Robotics Club</span>
+        </div>
+        <div>
+          <label class="block-label">Scheduled Date & Time</label>
+          <p id="calendar-event-time" class="font-medium text-lg">April 15-16, 2026</p>
+        </div>
+        <div>
+          <label class="block-label">Event Description</label>
+          <p id="calendar-event-desc" class="text-muted-foreground mt-1">Concluded brief of scheduled events and timing logs.</p>
+        </div>
+        <div class="modal-footer">
+          <button id="btn-calendar-view-catalog" class="btn-primary">View In Events Hub</button>
+          <button id="btn-close-calendar-details" class="btn-outline">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GLOBAL DYNAMIC TOAST ALERTS (SLIDE-IN CONTAINER) -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Main JavaScript File -->
+  <script src="app.js"></script>
+</body>
+</html>
