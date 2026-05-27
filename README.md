@@ -1,4 +1,4 @@
-# 🌐 UniScout - Unified Smart Campus Portal
+#  UniScout - Unified Smart Campus Portal
 
 UniScout is a state-of-the-art, high-fidelity campus resource portal and ERP dashboard designed to unify academic management, event calendars, student clubs, notices, and faculty directories into a singular web ecosystem. 
 
@@ -45,7 +45,7 @@ graph TD
 
 ---
 
-## 🔄 Core System Flowcharts
+##  Core System Flowcharts
 
 ### 1. Cached Session Storage Verification & Migration Check
 This chart maps the startup process where any cached session containing outdated student parameters (e.g., "Sarah Jenkins") is automatically identified, corrected, and updated inside the browser's persistent cache.
@@ -157,11 +157,11 @@ npm start
 
 ### Step 4: Open in Browser
 Open your browser and navigate to:
-🌐 **[http://localhost:5000/](http://localhost:5000/)**
+ **[http://localhost:5000/](http://localhost:5000/)**
 
 ---
 
-## 🚀 Key Areas for Future Improvement
+##  Key Areas for Future Improvement
 
 While the platform is highly optimized and interactive, implementing the following additions will elevate it to a production-grade enterprise platform:
 
