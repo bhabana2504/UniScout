@@ -6,7 +6,7 @@ Featuring a premium **3D Cyber-Obsidian & Electric Purple theme** with mathemati
 
 ---
 
-## 🗺️ System Architecture
+##  System Architecture
 
 UniScout utilizes a decoupled, high-performance web architecture that balances direct API integrations with resilient frontend fallback mechanics.
 
